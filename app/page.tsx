@@ -10,27 +10,26 @@ export default function Component() {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
   // Animation wrapper (Framer Motion or fallback)
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-100 animate-fadein">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 animate-fadein">
       {/* Header */}
       <header className="bg-white shadow-lg sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img src="/paydayloan-logo.svg" alt="Payday Loan Logo" className="w-10 h-10 mr-2 drop-shadow-lg animate-bounce" />
-            <span className="font-extrabold text-3xl text-yellow-400 uppercase tracking-wide animate-fadein">Payday Loan</span>
+          <div className="flex items-center">
+            <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8">
-            <Link href="/" className="text-gray-600 hover:text-yellow-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-yellow-50 font-medium">Home</Link>
-            <Link href="/about-us" className="text-gray-600 hover:text-yellow-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-yellow-50 font-medium">About Us</Link>
-            <Link href="#" className="text-gray-600 hover:text-yellow-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-yellow-50 font-medium">Blog</Link>
-            <Link href="#" className="text-gray-600 hover:text-yellow-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-yellow-50 font-medium">Contact</Link>
-            <Link href="#" className="text-gray-600 hover:text-yellow-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-yellow-50 font-medium">Get A Quote</Link>
+        <nav className="hidden lg:flex space-x-8">
+            <Link href="/" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Home</Link>
+            <Link href="/about-us" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">About Us</Link>
+            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Blog</Link>
+            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Contact</Link>
+            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Get A Quote</Link>
           </nav>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 rounded-md hover:bg-yellow-100 transition-all duration-300 touch-manipulation shadow-md"
+            className="lg:hidden p-2 rounded-md hover:bg-green-100 transition-all duration-300 touch-manipulation shadow-md"
             aria-label="Open mobile menu"
             onClick={() => setMobileNavOpen(true)}
           >
@@ -45,7 +44,7 @@ export default function Component() {
             {/* Premium Sidebar - covers full screen, close icon inside, now with solid white background */}
             <aside className="bg-white shadow-2xl w-full h-full p-8 flex flex-col space-y-8 animate-slide-in-left rounded-none border-none">
               <button
-                className="self-end mb-6 p-2 rounded-full bg-yellow-400 hover:bg-yellow-500 shadow-lg"
+                className="self-end mb-6 p-2 rounded-full bg-green-400 hover:bg-green-500 shadow-lg"
                 aria-label="Close sidebar"
                 onClick={() => setMobileNavOpen(false)}
               >
@@ -54,28 +53,28 @@ export default function Component() {
                 </svg>
               </button>
               <nav className="flex flex-col gap-6 mt-4">
-                <Link href="/" className="flex items-center gap-3 text-lg font-bold text-yellow-500 hover:text-yellow-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="/" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" /></svg>
                   Home
                 </Link>
-                <Link href="/about-us" className="flex items-center gap-3 text-lg font-bold text-yellow-500 hover:text-yellow-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="/about-us" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16h6" /></svg>
                   About Us
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-yellow-500 hover:text-yellow-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10V7a5 5 0 0110 0v3" /></svg>
                   Blog
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-yellow-500 hover:text-yellow-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h2" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8V6a5 5 0 0110 0v2" /></svg>
                   Contact
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-yellow-500 hover:text-yellow-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" /></svg>
                   Get A Quote
                 </Link>
               </nav>
-              <div className="mt-auto text-center text-xs text-yellow-500 opacity-70">&copy; 2024 PayDay. All rights reserved.</div>
+              <div className="mt-auto text-center text-xs text-green-500 opacity-70">&copy; 2024 PayDay. All rights reserved.</div>
             </aside>
           </div>
         )}
@@ -97,7 +96,7 @@ export default function Component() {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                 GET APPROVED TODAY
                 <br />
-                <span className="text-yellow-400">WITH PayDay UPDATER</span>
+                <span className="text-green-400">WITH PayDay UPDATER</span>
               </h1>
               <p className="text-base sm:text-lg mb-8 text-gray-300 max-w-lg mx-auto lg:mx-0">
                 Quick pre-approval and get loan options for a loan today to finance your next purchase. Secure online
@@ -111,7 +110,7 @@ export default function Component() {
                 >
                   <Link href="/about-us">LEARN</Link>
                 </Button>
-                <Button asChild className="bg-yellow-400 text-black hover:bg-yellow-500 min-h-[48px] px-8 touch-manipulation transition-all duration-200 active:scale-95">
+                <Button asChild className="bg-green-400 text-black hover:bg-green-500 min-h-[48px] px-8 touch-manipulation transition-all duration-200 active:scale-95">
                   <Link href="/get-started">GET STARTED</Link>
                 </Button>
               </div>
@@ -166,7 +165,7 @@ export default function Component() {
       </section>
 
       {/* About Us Section */}
-      <section className="py-12 sm:py-16 bg-yellow-400">
+      <section className="py-12 sm:py-16 bg-green-400">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left order-2 lg:order-1">
@@ -206,8 +205,8 @@ export default function Component() {
         </div>
         <div className="relative container mx-auto px-4">
           <div className="text-center mb-8 lg:mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-yellow-400">THE PayDay UPDATER SERVICE</h1>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto"></div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-green-400">THE PayDay UPDATER SERVICE</h1>
+            <div className="w-24 h-1 bg-green-400 mx-auto"></div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left order-2 lg:order-1">
@@ -244,7 +243,7 @@ export default function Component() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             <div className="text-center p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
+              <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
                 <span className="text-black font-bold text-xl">1</span>
               </div>
               <h3 className="font-bold mb-2 text-lg">Quick & Easy Application</h3>
@@ -253,7 +252,7 @@ export default function Component() {
               </p>
             </div>
             <div className="text-center p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
+              <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
                 <span className="text-black font-bold text-xl">2</span>
               </div>
               <h3 className="font-bold mb-2 text-lg">Lightning Fast Approval</h3>
@@ -262,7 +261,7 @@ export default function Component() {
               </p>
             </div>
             <div className="text-center p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
+              <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
                 <span className="text-black font-bold text-xl">3</span>
               </div>
               <h3 className="font-bold mb-2 text-lg">Secure Funding</h3>
@@ -271,7 +270,7 @@ export default function Component() {
               </p>
             </div>
             <div className="text-center p-4 rounded-lg hover:shadow-lg transition-shadow duration-200">
-              <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
+              <div className="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4 touch-manipulation">
                 <span className="text-black font-bold text-xl">4</span>
               </div>
               <h3 className="font-bold mb-2 text-lg">Repay Over Time</h3>
@@ -284,7 +283,7 @@ export default function Component() {
       </section>
 
       {/* Mobile App Section */}
-      {/* <section className="py-12 sm:py-16 bg-yellow-400">
+      {/* <section className="py-12 sm:py-16 bg-green-400">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-8 lg:mb-12">
             <div className="text-center lg:text-left">
@@ -333,7 +332,7 @@ export default function Component() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">OUR LATEST RESOURCES</h2>
-            <div className="w-24 h-1 bg-yellow-400 mx-auto"></div>
+            <div className="w-24 h-1 bg-green-400 mx-auto"></div>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="bg-gray-800 border-gray-700">
@@ -345,7 +344,7 @@ export default function Component() {
                     <p className="text-gray-400 text-sm mb-4">
                       Everything you need to know about personal loans including rates, terms, and how to apply.
                     </p>
-                    <div className="text-yellow-400 text-xs">
+                    <div className="text-green-400 text-xs">
                       <span>Jane Doe</span>
                       <span className="mx-2">•</span>
                       <span>5 min read</span>
@@ -390,7 +389,7 @@ export default function Component() {
                 <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                   Download our mobile app to get instant access to your account and apply for loans on the go.
                 </p>
-                <Button className="bg-yellow-400 text-black hover:bg-yellow-500 min-h-[48px] px-6 touch-manipulation transition-all duration-200 active:scale-95">
+                <Button className="bg-green-400 text-black hover:bg-green-500 min-h-[48px] px-6 touch-manipulation transition-all duration-200 active:scale-95">
                   GET THE APP
                 </Button>
               </div>
@@ -424,10 +423,9 @@ export default function Component() {
         <div className="container mx-auto px-4">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center sm:text-left">
-                <div className="flex items-center justify-center sm:justify-start space-x-2 mb-6">
-                <img src="/paydayloan-logo.svg" alt="Payday Loan logo showing a stylized dollar sign and the words Payday Loan, conveying trust and financial support in a professional setting" className="w-8 h-8 mr-2" />
-                <span className="font-bold text-lg">Payday Loan</span>
-                </div>
+                <div className="flex items-center">
+            <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
+          </div>
               <div className="space-y-2 text-sm text-gray-400">
                 <p>123 Main Street</p>
                 <p>Suite 100</p>

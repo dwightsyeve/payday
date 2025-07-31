@@ -11,6 +11,13 @@ const steps = [
 ];
 
 export default function LoanApplication() {
+  // ...existing code...
+  const Head = require('next/head').default;
+  const [isLoading, setIsLoading] = useState(true);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
   const [step, setStep] = useState<number>(1);
   type FormType = {
     loanAmount: string;
@@ -108,13 +115,49 @@ export default function LoanApplication() {
     setStep((s) => s - 1);
   }
 
-  return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <header className="bg-white shadow-sm py-4 px-8 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <img src="/paydayloan-logo.svg" alt="Payday Loan Logo" className="w-10 h-10 mr-2 rounded-full shadow-lg" />
-          <span className="font-extrabold text-2xl text-blue-500 uppercase tracking-wide drop-shadow">PAYDAY LOAN</span>
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center">
+          <svg width="48" height="48" viewBox="0 0 48 48" className="mb-4 animate-walk" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <ellipse cx="24" cy="44" rx="10" ry="3" fill="#222" opacity="0.2" />
+              <circle cx="24" cy="14" r="6" fill="#222" />
+              <rect x="21" y="20" width="6" height="14" rx="3" fill="#222" />
+              <rect x="18" y="34" width="4" height="8" rx="2" fill="#222" transform="rotate(-20 20 38)" />
+              <rect x="26" y="34" width="4" height="8" rx="2" fill="#222" transform="rotate(20 28 38)" />
+              <rect x="19" y="24" width="4" height="10" rx="2" fill="#222" transform="rotate(-25 21 29)" />
+              <rect x="25" y="24" width="4" height="10" rx="2" fill="#222" transform="rotate(25 27 29)" />
+            </g>
+          </svg>
+          <span className="text-green-500 font-semibold text-lg">Loading application...</span>
+          <style>{`
+            .animate-walk {
+              animation: walk-bounce 1.2s infinite linear;
+            }
+            @keyframes walk-bounce {
+              0% { transform: translateX(0) translateY(0); }
+              20% { transform: translateX(6px) translateY(-2px); }
+              40% { transform: translateX(12px) translateY(0); }
+              60% { transform: translateX(18px) translateY(-2px); }
+              80% { transform: translateX(24px) translateY(0); }
+              100% { transform: translateX(0) translateY(0); }
+            }
+          `}</style>
         </div>
+      </div>
+    );
+  }
+  return (
+    <>
+      <Head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </Head>
+      <div className="min-h-screen flex flex-col bg-white">
+      <header className="bg-white shadow-sm py-4 px-8 flex items-center justify-between">
+        <div className="flex items-center">
+            <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
+          </div>
         <nav className="flex space-x-8 text-sm">
           <Link href="/" className="text-gray-600 hover:text-blue-700">Home</Link>
           <Link href="/about-us" className="text-gray-600 hover:text-blue-700">About Us</Link>
@@ -194,7 +237,7 @@ export default function LoanApplication() {
                 </div>
                 <div className="flex justify-between mt-6">
                   <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded">Next</button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
                 </div>
               </form>
             )}
@@ -245,7 +288,7 @@ export default function LoanApplication() {
                 {errors.nextPayDate && <p className="text-red-500 text-xs">{errors.nextPayDate}</p>}
                 <div className="flex justify-between mt-6">
                   <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded">Next</button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
                 </div>
               </form>
             )}
@@ -298,7 +341,7 @@ export default function LoanApplication() {
                 {errors.accountNumber && <p className="text-red-500 text-xs">{errors.accountNumber}</p>}
                 <div className="flex justify-between mt-6">
                   <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded">Next</button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
                 </div>
               </form>
             )}
@@ -371,13 +414,14 @@ export default function LoanApplication() {
                 </label>
                 <div className="flex justify-between mt-6">
                   <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded" disabled={!form.acknowledge}>Submit</button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded" disabled={!form.acknowledge}>Submit</button>
                 </div>
               </form>
             )}
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </>
   );
 }

@@ -185,6 +185,8 @@ export default function LoanApplication() {
                   <option value="4000">$4,000</option>
                   <option value="4500">$4,500</option>
                   <option value="5000">$5,000</option>
+                  <option value="10000"> over $10,000</option>
+                  
                 </select>
                 {errors.loanAmount && <p className="text-red-500 text-xs mb-2">{errors.loanAmount}</p>}
                 <div className="grid grid-cols-2 gap-4 mb-4">

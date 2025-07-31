@@ -52,10 +52,7 @@ export default function GetStarted() {
         <nav className="flex space-x-8 text-sm">
           <Link href="/" className="text-gray-600 hover:text-gray-900">Home</Link>
           <Link href="/about-us" className="text-gray-600 hover:text-gray-900">About Us</Link>
-          <Link href="#" className="text-gray-600 hover:text-gray-900">Blog</Link>
-          <Link href="#" className="text-gray-600 hover:text-gray-900">Contact</Link>
-          <Link href="#" className="text-gray-600 hover:text-gray-900">Login & Register</Link>
-        </nav>
+          </nav>
       </header>
 
       {/* Main Section */}

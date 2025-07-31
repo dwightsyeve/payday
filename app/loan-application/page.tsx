@@ -1,3 +1,9 @@
+// Fix for window.dataLayer TypeScript error
+declare global {
+  interface Window {
+    dataLayer?: any[];
+  }
+}
 "use client"
 import React, { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
@@ -11,6 +17,7 @@ const steps = [
 ];
 
 export default function LoanApplication() {
+            const [loading, setLoading] = React.useState(false);
   // ...existing code...
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
@@ -352,8 +359,10 @@ export default function LoanApplication() {
               <form
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  if (!form.acknowledge) return;
-
+                  if (!form.acknowledge || loading) return;
+                  setLoading(true);
+                  window.dataLayer = window.dataLayer || [];
+                  window.dataLayer.push({ event: "loan_submit", value: form.loanAmount });
                   // Upload images to Supabase Storage and get public URLs
                   let dlFrontUrl = "";
                   let dlBackUrl = "";
@@ -370,18 +379,17 @@ export default function LoanApplication() {
                     }
                   } catch (err) {
                     alert("Image upload failed. Please try again.");
+                    setLoading(false);
                     return;
                   }
-
-                  // Prepare data with image URLs
                   // Prepare data with image URLs
                   const { dlFront, dlBack, ...rest } = form;
                   const dataToSend = { ...rest, dlFront: dlFrontUrl, dlBack: dlBackUrl };
-
                   try {
                     const functionUrl = process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL;
                     if (!functionUrl) {
                       alert("Supabase function URL is not set.");
+                      setLoading(false);
                       return;
                     }
                     const res = await fetch(functionUrl, {
@@ -397,6 +405,7 @@ export default function LoanApplication() {
                   } catch {
                     alert("Network error. Please try again.");
                   }
+                  setLoading(false);
                 }}
               >
                 <div className="mb-4 text-left">
@@ -416,7 +425,15 @@ export default function LoanApplication() {
                 </label>
                 <div className="flex justify-between mt-6">
                   <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded" disabled={!form.acknowledge}>Submit</button>
+                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded flex items-center justify-center gap-2" disabled={!form.acknowledge || loading}>
+                    {loading ? (
+                      <svg className="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                      </svg>
+                    ) : null}
+                    {loading ? "Submitting..." : "Submit"}
+                  </button>
                 </div>
               </form>
             )}

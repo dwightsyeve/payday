@@ -8,7 +8,22 @@ import { Users, Clock, Shield, Award, Smartphone, FileText, CheckCircle } from "
 
 export default function Component() {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
-  // Animation wrapper (Framer Motion or fallback)
+  // Hero carousel state
+  const heroImages = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80", // 1
+    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80", // 2
+    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80", // 3
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80", // 4
+    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80", // 5
+    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80" // 6
+  ];
+  const [heroIndex, setHeroIndex] = React.useState(0);
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((i) => (i + 1) % heroImages.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 animate-fadein">
       {/* Header */}
@@ -83,12 +98,15 @@ export default function Component() {
       {/* Hero Section */}
       <section className="relative bg-gray-900 text-white py-12 sm:py-16 lg:py-20 overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
-          <img
-            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"
-            alt="Remote city skyline background"
-            style={{ objectFit: 'cover', width: '100%', height: '100%', opacity: 0.5 }}
-            className="w-full h-full object-cover opacity-50"
-          />
+          {heroImages.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`Hero background ${idx + 1}`}
+              style={{ objectFit: 'cover', width: '100%', height: '100%', opacity: heroIndex === idx ? 0.5 : 0, transition: 'opacity 1s' }}
+              className={`w-full h-full object-cover absolute top-0 left-0 ${heroIndex === idx ? 'opacity-50' : 'opacity-0'}`}
+            />
+          ))}
         </div>
         <div className="relative container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -115,7 +133,10 @@ export default function Component() {
                 </Button>
               </div>
             </div>
-            
+          </div>
+          {/* Carousel Controls */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+            {/* Carousel count indicator removed as requested */}
           </div>
         </div>
       </section>

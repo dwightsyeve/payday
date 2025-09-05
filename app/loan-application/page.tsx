@@ -364,10 +364,32 @@ export default function LoanApplication() {
                 <label className="block mb-1">Loan Purpose</label>
                 <select name="loanPurpose" value={form.loanPurpose} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
                   <option value="">Select purpose</option>
-                  <option value="Personal">Personal</option>
-                  <option value="Business">Business</option>
-                  <option value="Education">Education</option>
-                  <option value="Other">Other</option>
+                  <optgroup label="Standard Purposes">
+                    <option value="Personal">Personal</option>
+                    <option value="Business">Business</option>
+                    <option value="Education">Education</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Home Improvement">Home Improvement</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Vacation">Vacation</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Debt Consolidation">Debt Consolidation</option>
+                  </optgroup>
+                  <optgroup label="Consolidation Options">
+                    <option value="Federal Student Loan Consolidation">Federal Student Loan Consolidation</option>
+                    <option value="Private Student Loan Consolidation">Private Student Loan Consolidation</option>
+                    <option value="Home Equity Loan (HEL)">Home Equity Loan (HEL)</option>
+                    <option value="Home Equity Line of Credit (HELOC)">Home Equity Line of Credit (HELOC)</option>
+                    <option value="Personal Loan for Debt Consolidation">Personal Loan for Debt Consolidation</option>
+                    <option value="Credit Card Balance Transfer">Credit Card Balance Transfer</option>
+                    <option value="Debt Management Plan (DMP)">Debt Management Plan (DMP)</option>
+                    <option value="Debt Settlement">Debt Settlement</option>
+                    <option value="401(k) or Retirement Account Loan">401(k) or Retirement Account Loan</option>
+                    <option value="Life Insurance Policy Loan">Life Insurance Policy Loan</option>
+                    <option value="Peer-to-Peer (P2P) Lending">Peer-to-Peer (P2P) Lending</option>
+                    <option value="Small Business Debt Consolidation">Small Business Debt Consolidation</option>
+                    <option value="Medical Debt Consolidation">Medical Debt Consolidation</option>
+                  </optgroup>
                 </select>
                 {errors.loanPurpose && <p className="text-red-500 text-xs">{errors.loanPurpose}</p>}
                 <label className="block mb-1">Bank Name</label>

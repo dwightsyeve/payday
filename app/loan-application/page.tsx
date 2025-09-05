@@ -252,9 +252,27 @@ export default function LoanApplication() {
             )}
             {/* Step 2: Employment & Income */}
             {step === 2 && (
-              <form onSubmit={e => {e.preventDefault(); next(["incomeSource","employerName","employerPhone","netIncome","payFrequency","nextPayDate"]);}}>
+              <form onSubmit={e => {
+                e.preventDefault(); 
+                const baseFields: (keyof FormType)[] = [
+                  "incomeSource",
+                  "netIncome",
+                  "payFrequency",
+                  "nextPayDate"
+                ];
+                const employmentFields: (keyof FormType)[] = form.incomeSource === 'Employment' 
+                  ? ["employerName", "employerPhone"] 
+                  : [];
+                const allFields = [...baseFields, ...employmentFields];
+                next(allFields);
+              }}>
                 <label className="block mb-1">Source of Income</label>
-                <select name="incomeSource" value={form.incomeSource} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
+                <select 
+                  name="incomeSource" 
+                  value={form.incomeSource} 
+                  onChange={handleChange} 
+                  className="w-full mb-4 p-2 border rounded"
+                >
                   <option value="">Select source</option>
                   <option value="Employment">Employment</option>
                   <option value="Self-Employed">Self-Employed</option>
@@ -262,12 +280,28 @@ export default function LoanApplication() {
                   <option value="Other">Other</option>
                 </select>
                 {errors.incomeSource && <p className="text-red-500 text-xs">{errors.incomeSource}</p>}
-                <label className="block mb-1">Employer Name</label>
-                <input name="employerName" value={form.employerName} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.employerName && <p className="text-red-500 text-xs">{errors.employerName}</p>}
-                <label className="block mb-1">Employer Phone Number</label>
-                <input name="employerPhone" value={form.employerPhone} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.employerPhone && <p className="text-red-500 text-xs">{errors.employerPhone}</p>}
+                
+                {form.incomeSource === 'Employment' && (
+                  <>
+                    <label className="block mb-1">Employer Name</label>
+                    <input 
+                      name="employerName" 
+                      value={form.employerName} 
+                      onChange={handleChange} 
+                      className="w-full mb-4 p-2 border rounded" 
+                    />
+                    {errors.employerName && <p className="text-red-500 text-xs">{errors.employerName}</p>}
+                    
+                    <label className="block mb-1">Employer Phone Number</label>
+                    <input 
+                      name="employerPhone" 
+                      value={form.employerPhone} 
+                      onChange={handleChange} 
+                      className="w-full mb-4 p-2 border rounded" 
+                    />
+                    {errors.employerPhone && <p className="text-red-500 text-xs">{errors.employerPhone}</p>}
+                  </>
+                )}
                 <label className="block mb-1">Monthly Net Income</label>
                 <select name="netIncome" value={form.netIncome} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
                   <option value="">Select amount</option>

@@ -398,7 +398,46 @@ export default function LoanApplication() {
                       body: JSON.stringify(dataToSend)
                     });
                     if (res.ok) {
-                      alert("Application sent successfully!");
+                      // Replace the alert with this code
+                      document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                          <title>Application Submitted</title>
+                          <style>
+                            body {
+                              font-family: Arial, sans-serif;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              height: 100vh;
+                              margin: 0;
+                              background-color: #f5f5f5;
+                            }
+                            .success-message {
+                              text-align: center;
+                              padding: 2rem;
+                              background: white;
+                              border-radius: 8px;
+                              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <div class="success-message">
+                            <h1>Application Submitted Successfully!</h1>
+                            <p>Thank you for your submission. You will be redirected to the homepage in 5 seconds...</p>
+                          </div>
+                          <script>
+                            setTimeout(() => {
+                              window.location.href = '/';
+                            }, 5000);
+                          </script>
+                        </body>
+                        </html>
+                      `);
+                      document.close();
+                      return;
                     } else {
                       alert("Failed to send application. Please try again.");
                     }

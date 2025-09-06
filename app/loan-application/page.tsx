@@ -23,6 +23,71 @@ export default function LoanApplication() {
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState('');
   
+  // US States for dropdown
+  const usStates = [
+    { code: 'AL', name: 'Alabama' },
+    { code: 'AK', name: 'Alaska' },
+    { code: 'AZ', name: 'Arizona' },
+    { code: 'AR', name: 'Arkansas' },
+    { code: 'CA', name: 'California' },
+    { code: 'CO', name: 'Colorado' },
+    { code: 'CT', name: 'Connecticut' },
+    { code: 'DE', name: 'Delaware' },
+    { code: 'FL', name: 'Florida' },
+    { code: 'GA', name: 'Georgia' },
+    { code: 'HI', name: 'Hawaii' },
+    { code: 'ID', name: 'Idaho' },
+    { code: 'IL', name: 'Illinois' },
+    { code: 'IN', name: 'Indiana' },
+    { code: 'IA', name: 'Iowa' },
+    { code: 'KS', name: 'Kansas' },
+    { code: 'KY', name: 'Kentucky' },
+    { code: 'LA', name: 'Louisiana' },
+    { code: 'ME', name: 'Maine' },
+    { code: 'MD', name: 'Maryland' },
+    { code: 'MA', name: 'Massachusetts' },
+    { code: 'MI', name: 'Michigan' },
+    { code: 'MN', name: 'Minnesota' },
+    { code: 'MS', name: 'Mississippi' },
+    { code: 'MO', name: 'Missouri' },
+    { code: 'MT', name: 'Montana' },
+    { code: 'NE', name: 'Nebraska' },
+    { code: 'NV', name: 'Nevada' },
+    { code: 'NH', name: 'New Hampshire' },
+    { code: 'NJ', name: 'New Jersey' },
+    { code: 'NM', name: 'New Mexico' },
+    { code: 'NY', name: 'New York' },
+    { code: 'NC', name: 'North Carolina' },
+    { code: 'ND', name: 'North Dakota' },
+    { code: 'OH', name: 'Ohio' },
+    { code: 'OK', name: 'Oklahoma' },
+    { code: 'OR', name: 'Oregon' },
+    { code: 'PA', name: 'Pennsylvania' },
+    { code: 'RI', name: 'Rhode Island' },
+    { code: 'SC', name: 'South Carolina' },
+    { code: 'SD', name: 'South Dakota' },
+    { code: 'TN', name: 'Tennessee' },
+    { code: 'TX', name: 'Texas' },
+    { code: 'UT', name: 'Utah' },
+    { code: 'VT', name: 'Vermont' },
+    { code: 'VA', name: 'Virginia' },
+    { code: 'WA', name: 'Washington' },
+    { code: 'WV', name: 'West Virginia' },
+    { code: 'WI', name: 'Wisconsin' },
+    { code: 'WY', name: 'Wyoming' }
+  ];
+  
+  // Validation functions
+  const validatePhoneNumber = (phone: string) => {
+    const phoneRegex = /^\+?1?[-.\s]?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}$/;
+    return phoneRegex.test(phone);
+  };
+  
+  const validateSSN = (ssn: string) => {
+    const ssnRegex = /^\d{3}[-.]?\d{2}[-.]?\d{4}$/;
+    return ssnRegex.test(ssn);
+  };
+  
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
   React.useEffect(() => {
@@ -146,9 +211,17 @@ export default function LoanApplication() {
   // Simple validation for required fields
   function validate(fields: (keyof FormType)[]): boolean {
     const newErrors: ErrorsType = {};
+    
     fields.forEach((field: keyof FormType) => {
-      if (!form[field]) newErrors[field] = "Required";
+      if (!form[field]) {
+        newErrors[field] = "Required";
+      } else if (field === 'phone' && !validatePhoneNumber(form.phone)) {
+        newErrors.phone = "Please enter a valid phone number (e.g., 123-456-7890)";
+      } else if (field === 'ssn' && !validateSSN(form.ssn)) {
+        newErrors.ssn = "Please enter a valid SSN (e.g., 123-45-6789)";
+      }
     });
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -320,9 +393,28 @@ export default function LoanApplication() {
                 <label className="block mb-1">Email Address</label>
                 <input name="email" type="email" value={form.email} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
-                <label className="block mb-1">Mobile Number</label>
-                <input name="phone" value={form.phone} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
+                <div>
+                  <label className="block mb-1">Mobile Number</label>
+                  <input 
+                    name="phone" 
+                    value={form.phone} 
+                    onChange={(e) => {
+                      // Format phone number as user types
+                      const value = e.target.value.replace(/\D/g, '').substring(0, 10);
+                      const formatted = value.replace(/(\d{3})(\d{0,3})(\d{0,4})/, (_, p1, p2, p3) => 
+                        p2 ? `(${p1}) ${p2}${p3 ? `-${p3}` : ''}` : p1
+                      );
+                      setForm(prev => ({ ...prev, phone: formatted }));
+                    }}
+                    placeholder="(123) 456-7890"
+                    className="w-full mb-1 p-2 border rounded" 
+                  />
+                  {errors.phone ? (
+                    <p className="text-red-500 text-xs">{errors.phone}</p>
+                  ) : (
+                    <p className="text-xs text-gray-500">Format: (123) 456-7890</p>
+                  )}
+                </div>
                 <div className="relative">
                   <label className="block mb-1">Zip Code</label>
                   <div className="relative">
@@ -368,14 +460,20 @@ export default function LoanApplication() {
                   </div>
                   <div>
                     <label className="block mb-1">State</label>
-                    <input 
-                      name="state" 
-                      value={form.state} 
-                      onChange={handleChange} 
-                      className="w-full mb-4 p-2 border rounded" 
-                      placeholder={isLocating ? 'Detecting...' : 'State'}
+                    <select
+                      name="state"
+                      value={form.state}
+                      onChange={handleChange}
+                      className="w-full mb-4 p-2 border rounded bg-white"
                       disabled={isLocating}
-                    />
+                    >
+                      <option value="">Select State</option>
+                      {usStates.map((state) => (
+                        <option key={state.code} value={state.code}>
+                          {state.name}
+                        </option>
+                      ))}
+                    </select>
                     {errors.state && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.state}</p>}
                   </div>
                 </div>
@@ -388,9 +486,28 @@ export default function LoanApplication() {
                 <label className="block mb-1">Date of Birth</label>
                 <input name="dob" type="date" value={form.dob} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.dob && <p className="text-red-500 text-xs">{errors.dob}</p>}
-                <label className="block mb-1">SSN <span className="text-xs text-gray-400">(This will never affect your credit score)</span></label>
-                <input name="ssn" value={form.ssn} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.ssn && <p className="text-red-500 text-xs">{errors.ssn}</p>}
+                <div>
+                  <label className="block mb-1">SSN <span className="text-xs text-gray-400">(This will never affect your credit score)</span></label>
+                  <input 
+                    name="ssn" 
+                    value={form.ssn} 
+                    onChange={(e) => {
+                      // Format SSN as user types
+                      const value = e.target.value.replace(/\D/g, '').substring(0, 9);
+                      const formatted = value.replace(/^(\d{3})(\d{0,2})(\d{0,4})/, (_, p1, p2, p3) => 
+                        p2 ? `${p1}-${p2}${p3 ? `-${p3}` : ''}` : p1
+                      );
+                      setForm(prev => ({ ...prev, ssn: formatted }));
+                    }}
+                    placeholder="123-45-6789"
+                    className="w-full mb-1 p-2 border rounded" 
+                  />
+                  {errors.ssn ? (
+                    <p className="text-red-500 text-xs">{errors.ssn}</p>
+                  ) : (
+                    <p className="text-xs text-gray-500">Format: 123-45-6789</p>
+                  )}
+                </div>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block mb-1">Driver License Front</label>

@@ -32,8 +32,8 @@ export default function Component() {
           to { transform: rotate(360deg); }
         }
         .clock-face {
-          width: 24px;
-          height: 24px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: #111827;
           border: 2px solid #374151;
@@ -103,7 +103,7 @@ export default function Component() {
             </Link>
             
             {/* Animated Clock - Visible only on mobile */}
-            <div className="ml-3 lg:hidden">
+            <div className="ml-4 lg:hidden">
               <div className="clock-face">
                 {[0, 1, 2, 3].map((i) => (
                   <div 

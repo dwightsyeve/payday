@@ -382,16 +382,36 @@ export default function LoanApplication() {
                   </div>
                 )}
                 {errors.loanPurpose && <p className="text-red-500 text-xs">{errors.loanPurpose}</p>}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <label className="block mb-1">First Name</label>
-                    <input name="firstName" value={form.firstName} onChange={handleChange} className="w-full p-2 border rounded" />
-                    {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName}</p>}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">First Name</label>
+                    <div className="relative">
+                      <input 
+                        name="firstName" 
+                        value={form.firstName} 
+                        onChange={handleChange} 
+                        placeholder="John"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                      />
+                    </div>
+                    {errors.firstName && (
+                      <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+                    )}
                   </div>
-                  <div>
-                    <label className="block mb-1">Last Name</label>
-                    <input name="lastName" value={form.lastName} onChange={handleChange} className="w-full p-2 border rounded" />
-                    {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName}</p>}
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                    <div className="relative">
+                      <input 
+                        name="lastName" 
+                        value={form.lastName} 
+                        onChange={handleChange} 
+                        placeholder="Doe"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                      />
+                    </div>
+                    {errors.lastName && (
+                      <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+                    )}
                   </div>
                 </div>
                 <label className="block mb-1">Email Address</label>
@@ -524,9 +544,20 @@ export default function LoanApplication() {
                     {errors.dlBack && <p className="text-red-500 text-xs">{errors.dlBack}</p>}
                   </div>
                 </div>
-                <div className="flex justify-between mt-6">
-                  <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
+                <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
+                  <button 
+                    type="button" 
+                    onClick={prev}
+                    className="px-6 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Back
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="px-6 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    Continue
+                  </button>
                 </div>
               </form>
             )}
@@ -546,72 +577,136 @@ export default function LoanApplication() {
                 const allFields = [...baseFields, ...employmentFields];
                 next(allFields);
               }}>
-                <label className="block mb-1">Source of Income</label>
-                <select 
-                  name="incomeSource" 
-                  value={form.incomeSource} 
-                  onChange={handleChange} 
-                  className="w-full mb-4 p-2 border rounded"
-                >
-                  <option value="">Select source</option>
-                  <option value="Employment">Employment</option>
-                  <option value="Self-Employed">Self-Employed</option>
-                  <option value="Benefits">Benefits</option>
-                  <option value="Other">Other</option>
-                </select>
-                {errors.incomeSource && <p className="text-red-500 text-xs">{errors.incomeSource}</p>}
-                
-                {form.incomeSource === 'Employment' && (
-                  <>
-                    <label className="block mb-1">Employer Name</label>
-                    <input 
-                      name="employerName" 
-                      value={form.employerName} 
+                <div className="space-y-6">
+                  <div className="space-y-1">
+                    <label className="block text-sm font-medium text-gray-700">Source of Income</label>
+                    <select 
+                      name="incomeSource" 
+                      value={form.incomeSource} 
                       onChange={handleChange} 
-                      className="w-full mb-4 p-2 border rounded" 
-                    />
-                    {errors.employerName && <p className="text-red-500 text-xs">{errors.employerName}</p>}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Select your income source</option>
+                      <option value="Employment">Employment</option>
+                      <option value="Self-Employed">Self-Employed</option>
+                      <option value="Benefits">Benefits</option>
+                      <option value="Other">Other Income Source</option>
+                    </select>
+                    {errors.incomeSource && (
+                      <p className="mt-1 text-sm text-red-600">{errors.incomeSource}</p>
+                    )}
+                  </div>
+                  
+                  {form.incomeSource === 'Employment' && (
+                    <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                      <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-700">Employer Name</label>
+                        <input 
+                          name="employerName" 
+                          value={form.employerName} 
+                          onChange={handleChange} 
+                          placeholder="Company Name"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                        />
+                        {errors.employerName && (
+                          <p className="mt-1 text-sm text-red-600">{errors.employerName}</p>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-700">Employer Phone Number</label>
+                        <input 
+                          name="employerPhone" 
+                          value={form.employerPhone} 
+                          onChange={handleChange} 
+                          placeholder="(555) 123-4567"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                        />
+                        {errors.employerPhone && (
+                          <p className="mt-1 text-sm text-red-600">{errors.employerPhone}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700">Monthly Net Income</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <span className="text-gray-500 sm:text-sm">$</span>
+                        </div>
+                        <select 
+                          name="netIncome" 
+                          value={form.netIncome} 
+                          onChange={handleChange} 
+                          className="w-full pl-8 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                          <option value="">Select monthly income</option>
+                          <option value="1000">$1,000</option>
+                          <option value="1500">$1,500</option>
+                          <option value="2000">$2,000</option>
+                          <option value="2500">$2,500</option>
+                          <option value="3000">$3,000</option>
+                          <option value="3500">$3,500</option>
+                          <option value="4000">$4,000</option>
+                          <option value="4500">$4,500</option>
+                          <option value="5000">$5,000+</option>
+                        </select>
+                      </div>
+                      {errors.netIncome && (
+                        <p className="mt-1 text-sm text-red-600">{errors.netIncome}</p>
+                      )}
+                    </div>
                     
-                    <label className="block mb-1">Employer Phone Number</label>
-                    <input 
-                      name="employerPhone" 
-                      value={form.employerPhone} 
-                      onChange={handleChange} 
-                      className="w-full mb-4 p-2 border rounded" 
-                    />
-                    {errors.employerPhone && <p className="text-red-500 text-xs">{errors.employerPhone}</p>}
-                  </>
-                )}
-                <label className="block mb-1">Monthly Net Income</label>
-                <select name="netIncome" value={form.netIncome} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
-                  <option value="">Select amount</option>
-                  <option value="1000">$1,000</option>
-                  <option value="1500">$1,500</option>
-                  <option value="2000">$2,000</option>
-                  <option value="2500">$2,500</option>
-                  <option value="3000">$3,000</option>
-                  <option value="3500">$3,500</option>
-                  <option value="4000">$4,000</option>
-                  <option value="4500">$4,500</option>
-                  <option value="5000">$5,000</option>
-                </select>
-                {errors.netIncome && <p className="text-red-500 text-xs">{errors.netIncome}</p>}
-                <label className="block mb-1">How often are you paid?</label>
-                <select name="payFrequency" value={form.payFrequency} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
-                  <option value="">Select frequency</option>
-                  <option value="Weekly">Weekly</option>
-                  <option value="Bi-Weekly">Bi-Weekly</option>
-                  <option value="Semi-Monthly">Semi-Monthly</option>
-                  <option value="Monthly">Monthly</option>
-                  <option value="Every 3 Months">Every 3 Months</option>
-                </select>
-                {errors.payFrequency && <p className="text-red-500 text-xs">{errors.payFrequency}</p>}
-                <label className="block mb-1">Next Pay Date</label>
-                <input name="nextPayDate" type="date" value={form.nextPayDate} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.nextPayDate && <p className="text-red-500 text-xs">{errors.nextPayDate}</p>}
-                <div className="flex justify-between mt-6">
-                  <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700">Pay Frequency</label>
+                      <select 
+                        name="payFrequency" 
+                        value={form.payFrequency} 
+                        onChange={handleChange} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="">Select frequency</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Bi-Weekly">Bi-Weekly</option>
+                        <option value="Semi-Monthly">Semi-Monthly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Every 3 Months">Every 3 Months</option>
+                      </select>
+                      {errors.payFrequency && (
+                        <p className="mt-1 text-sm text-red-600">{errors.payFrequency}</p>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-sm font-medium text-gray-700">Next Pay Date</label>
+                      <input 
+                        name="nextPayDate" 
+                        type="date" 
+                        value={form.nextPayDate} 
+                        onChange={handleChange} 
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.nextPayDate && (
+                        <p className="mt-1 text-sm text-red-600">{errors.nextPayDate}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
+                  <button 
+                    type="button" 
+                    onClick={prev}
+                    className="px-6 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Back
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="px-6 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    Continue
+                  </button>
                 </div>
               </form>
             )}
@@ -671,9 +766,20 @@ export default function LoanApplication() {
                 <label className="block mb-1">Account Number</label>
                 <input name="accountNumber" value={form.accountNumber} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.accountNumber && <p className="text-red-500 text-xs">{errors.accountNumber}</p>}
-                <div className="flex justify-between mt-6">
-                  <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded">Next</button>
+                <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
+                  <button 
+                    type="button" 
+                    onClick={prev}
+                    className="px-6 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Back
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="px-6 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    Continue
+                  </button>
                 </div>
               </form>
             )}

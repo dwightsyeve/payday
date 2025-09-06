@@ -22,6 +22,9 @@ export default function LoanApplication() {
   const [customConsolidation, setCustomConsolidation] = useState('');
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState('');
+  const [bankSuggestions, setBankSuggestions] = useState<string[]>([]);
+  const [showBankSuggestions, setShowBankSuggestions] = useState(false);
+  const [bankSearchTimeout, setBankSearchTimeout] = useState<NodeJS.Timeout | null>(null);
   
   // US States for dropdown
   const usStates = [
@@ -250,8 +253,55 @@ export default function LoanApplication() {
     return Object.keys(newErrors).length === 0;
   }
 
+  // Common US banks for suggestions
+  const commonBanks = [
+    'Bank of America', 'Chase', 'Wells Fargo', 'Citibank', 'U.S. Bank',
+    'Truist Bank', 'PNC Bank', 'TD Bank', 'Capital One', 'Ally Bank',
+    'USAA', 'Navy Federal Credit Union', 'Charles Schwab Bank', 'Discover Bank'
+  ];
+
+  const searchBanks = (query: string) => {
+    if (!query.trim()) {
+      setBankSuggestions(commonBanks);
+      return;
+    }
+    const filtered = commonBanks.filter(bank => 
+      bank.toLowerCase().includes(query.toLowerCase())
+    );
+    setBankSuggestions(filtered);
+  };
+
+  const handleBankNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setForm(prev => ({ ...prev, bankName: value }));
+    
+    // Clear any existing timeout
+    if (bankSearchTimeout) {
+      clearTimeout(bankSearchTimeout);
+    }
+    
+    // Set a new timeout
+    const timeout = setTimeout(() => {
+      searchBanks(value);
+    }, 200); // 200ms delay
+    
+    setBankSearchTimeout(timeout);
+  };
+
+  const handleBankSelect = (bankName: string) => {
+    setForm(prev => ({ ...prev, bankName }));
+    setShowBankSuggestions(false);
+  };
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value, type, checked, files } = e.target as HTMLInputElement;
+    
+    // Special handling for bank name to show suggestions
+    if (name === 'bankName') {
+      handleBankNameChange(e as React.ChangeEvent<HTMLInputElement>);
+      return;
+    }
+    
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : type === "file" ? (files ? files[0] : null) : value
@@ -778,9 +828,43 @@ export default function LoanApplication() {
                 </select>
                 {errors.loanAmount && <p className="text-red-500 text-xs mb-2">{errors.loanAmount}</p>}
 
-                <label className="block mb-1">Bank Name</label>
-                <input name="bankName" value={form.bankName} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.bankName && <p className="text-red-500 text-xs">{errors.bankName}</p>}
+                <div className="relative mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Bank Name</label>
+                  <input 
+                    name="bankName" 
+                    value={form.bankName} 
+                    onChange={handleChange}
+                    onFocus={() => {
+                      searchBanks(form.bankName);
+                      setShowBankSuggestions(true);
+                    }}
+                    onBlur={() => {
+                      // Small delay to allow click on suggestions
+                      setTimeout(() => setShowBankSuggestions(false), 200);
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                    autoComplete="off"
+                  />
+                  {showBankSuggestions && bankSuggestions.length > 0 && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                      {bankSuggestions.map((bank) => (
+                        <div
+                          key={bank}
+                          className="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                          onMouseDown={(e) => {
+                            e.preventDefault(); // Prevent input blur
+                            handleBankSelect(bank);
+                          }}
+                        >
+                          {bank}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {errors.bankName && (
+                    <p className="mt-1 text-sm text-red-600">{errors.bankName}</p>
+                  )}
+                </div>
                 <label className="block mb-1">Bank State</label>
                 <input name="bankState" value={form.bankState} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.bankState && <p className="text-red-500 text-xs">{errors.bankState}</p>}

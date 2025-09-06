@@ -18,6 +18,8 @@ const steps = [
 
 export default function LoanApplication() {
             const [loading, setLoading] = React.useState(false);
+  const [showConsolidationOptions, setShowConsolidationOptions] = useState(false);
+  const [customConsolidation, setCustomConsolidation] = useState('');
   
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
@@ -115,6 +117,29 @@ export default function LoanApplication() {
     }));
   }
 
+  const handleLoanPurposeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setShowConsolidationOptions(value === 'Debt Consolidation');
+    if (value !== 'Debt Consolidation') {
+      setForm(prev => ({ ...prev, loanPurpose: value }));
+    }
+  };
+
+  const handleConsolidationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    if (value === 'others') {
+      setForm(prev => ({ ...prev, loanPurpose: customConsolidation || 'Other Debt Consolidation' }));
+    } else {
+      setForm(prev => ({ ...prev, loanPurpose: value }));
+    }
+  };
+
+  const handleCustomConsolidationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCustomConsolidation(value);
+    setForm(prev => ({ ...prev, loanPurpose: value || 'Other Debt Consolidation' }));
+  };
+
   function next(fields: (keyof FormType)[]) {
     if (validate(fields)) setStep((s) => s + 1);
   }
@@ -180,37 +205,63 @@ export default function LoanApplication() {
             {/* Step 1: Personal Info */}
             {step === 1 && (
             
-              <form onSubmit={e => {e.preventDefault(); next(["loanPurpose","firstName","lastName","email","phone","zip","street","city","state","dob","ssn","dlFront","dlBack"]);}}>
-                <label className="block mb-1">Loan Purpose</label>
-                <select name="loanPurpose" value={form.loanPurpose} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
-                  <option value="">Select purpose</option>
+              <form onSubmit={e => {
+                e.preventDefault(); 
+                const fields: (keyof FormType)[] = ["firstName","lastName","email","phone","zip","street","city","state","dob","ssn","dlFront","dlBack"];
+                if (form.loanPurpose === 'Debt Consolidation' && !form.loanPurpose) {
+                  fields.push('loanPurpose');
+                } else {
+                  fields.push('loanPurpose');
+                }
+                next(fields);
+              }}>
+                <label className="block mb-1">Loan Type</label>
+                <select 
+                  name="loanPurpose" 
+                  value={form.loanPurpose === 'Debt Consolidation' ? 'Debt Consolidation' : form.loanPurpose} 
+                  onChange={handleLoanPurposeChange} 
+                  className="w-full mb-4 p-2 border rounded"
+                >
+                  <option value="">Select type</option>
                   <optgroup label="Standard Purposes">
-                    <option value="Personal">Personal</option>
-                    <option value="Business">Business</option>
-                    <option value="Education">Education</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Home Improvement">Home Improvement</option>
-                    <option value="Auto">Auto</option>
-                    <option value="Vacation">Vacation</option>
-                    <option value="Wedding">Wedding</option>
+                    <option value="Personal">Personal Loan</option>
+                    <option value="Business">Credit Repair</option>
+                    <option value="Education">Student Loan Assistance</option>
+                    <option value="Medical">Business Loan</option>
                     <option value="Debt Consolidation">Debt Consolidation</option>
-                  </optgroup>
-                  <optgroup label="Consolidation Options">
-                    <option value="Federal Student Loan Consolidation">Federal Student Loan Consolidation</option>
-                    <option value="Private Student Loan Consolidation">Private Student Loan Consolidation</option>
-                    <option value="Home Equity Loan (HEL)">Home Equity Loan (HEL)</option>
-                    <option value="Home Equity Line of Credit (HELOC)">Home Equity Line of Credit (HELOC)</option>
-                    <option value="Personal Loan for Debt Consolidation">Personal Loan for Debt Consolidation</option>
-                    <option value="Credit Card Balance Transfer">Credit Card Balance Transfer</option>
-                    <option value="Debt Management Plan (DMP)">Debt Management Plan (DMP)</option>
-                    <option value="Debt Settlement">Debt Settlement</option>
-                    <option value="401(k) or Retirement Account Loan">401(k) or Retirement Account Loan</option>
-                    <option value="Life Insurance Policy Loan">Life Insurance Policy Loan</option>
-                    <option value="Peer-to-Peer (P2P) Lending">Peer-to-Peer (P2P) Lending</option>
-                    <option value="Small Business Debt Consolidation">Small Business Debt Consolidation</option>
-                    <option value="Medical Debt Consolidation">Medical Debt Consolidation</option>
-                  </optgroup>
+                  </optgroup>  
                 </select>
+
+                {showConsolidationOptions && (
+                  <div className="mt-2 pl-4 border-l-4 border-blue-200">
+                    <label className="block mb-1 text-sm text-gray-600">Consolidation Type</label>
+                    <select 
+                      value={form.loanPurpose} 
+                      onChange={handleConsolidationChange}
+                      className="w-full mb-2 p-2 border rounded text-sm"
+                    >
+                      <option value="">Select consolidation type</option>
+                      <option value="Student Loan Consolidation">Student Loan Consolidation</option>
+                      <option value="Home Equity Line of Credit (HELOC)">Home Equity Line of Credit (HELOC)</option>
+                      <option value="Personal Loan for Debt Consolidation">Personal Loan for Debt Consolidation</option>
+                      <option value="Credit Card Balance Transfer">Credit Card Balance Transfer</option>
+                      <option value="Debt Settlement">Debt Settlement</option>
+                      <option value="others">Others (please specify)</option>
+                    </select>
+                    
+                    {form.loanPurpose === 'others' && (
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          value={customConsolidation}
+                          onChange={handleCustomConsolidationChange}
+                          placeholder="Please specify the consolidation type"
+                          className="w-full p-2 border rounded text-sm"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
                 {errors.loanPurpose && <p className="text-red-500 text-xs">{errors.loanPurpose}</p>}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>

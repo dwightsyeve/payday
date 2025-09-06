@@ -381,16 +381,16 @@ export default function LoanApplication() {
                 <label className="block mb-2 font-semibold">Loan Amount</label>
                 <select name="loanAmount" value={form.loanAmount} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
                   <option value="">Select amount</option>
-                  <option value="1000">$1,000</option>
-                  <option value="1500">$1,500</option>
-                  <option value="2000">$2,000</option>
-                  <option value="2500">$2,500</option>
-                  <option value="3000">$3,000</option>
-                  <option value="3500">$3,500</option>
-                  <option value="4000">$4,000</option>
-                  <option value="4500">$4,500</option>
-                  <option value="5000">$5,000</option>
-                  <option value="10000"> over $10,000</option>
+                  <option value="1000">$1 - $1,000</option>
+                  <option value="5000">$1,000 - $5,000</option>
+                  <option value="10000">$5,000 - $10,000</option>
+                  <option value="25000">$10,000 - $25,000</option>
+                  <option value="50000">$25,000 - $50,000</option>
+                  <option value="100000">$50,000 - $100,000</option>
+                  <option value="200000">$100,000 - $200,000</option>
+                  <option value="500000">$200,000 - $500,000</option>
+                  <option value="1m">$500,000 - $1m</option>
+                  <option value="1m above"> over $1m</option>
                   
                 </select>
                 {errors.loanAmount && <p className="text-red-500 text-xs mb-2">{errors.loanAmount}</p>}

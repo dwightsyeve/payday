@@ -27,45 +27,95 @@ export default function Component() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 animate-fadein">
       <style jsx global>{`
-        @keyframes spin-slow {
+        @keyframes rotate {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        .animate-spin-slow {
-          animation: spin-slow 3s linear infinite;
+        .clock-face {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: #111827;
+          border: 2px solid #374151;
+          box-shadow: 0 0 0 2px #111827, 0 0 5px rgba(0,0,0,0.8);
+          position: relative;
+        }
+        .clock-center {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 6px;
+          height: 6px;
+          background: #f3f4f6;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 10;
+        }
+        .hour-hand {
+          position: absolute;
+          top: 30%;
+          left: 48%;
+          width: 4px;
+          height: 30%;
+          background: #f3f4f6;
+          transform-origin: 50% 100%;
+          border-radius: 2px;
+          transform: rotate(30deg);
+        }
+        .minute-hand {
+          position: absolute;
+          top: 15%;
+          left: 49%;
+          width: 2px;
+          height: 40%;
+          background: #f3f4f6;
+          transform-origin: 50% 100%;
+          border-radius: 2px;
+          transform: rotate(60deg);
+        }
+        .second-hand {
+          position: absolute;
+          top: 5%;
+          left: 49.5%;
+          width: 1px;
+          height: 45%;
+          background: #ef4444;
+          transform-origin: 50% 100%;
+          transform: rotate(90deg);
+          animation: rotate 60s linear infinite;
+        }
+        .clock-mark {
+          position: absolute;
+          width: 1px;
+          height: 3px;
+          background: #f3f4f6;
+          left: 50%;
+          top: 2px;
+          transform-origin: 0 10px;
         }
       `}</style>
       {/* Header */}
       <header className="bg-white shadow-lg sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center">
-            <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
+            <Link href="/" className="focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-md">
+              <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg hover:opacity-90 transition-opacity" />
+            </Link>
             
-            {/* Animated Rolling Icon - Visible only on mobile */}
-            <div className="ml-2 lg:hidden">
-              <div className="relative w-8 h-8">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <svg 
-                    className="w-6 h-6 text-green-600 animate-spin-slow" 
-                    style={{ animationDuration: '3s' }}
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M19.428 15.428a2 2 0 01-2.828 0l-1.5-1.5a2 2 0 010-2.828l1.5-1.5a2 2 0 012.828 0l1.5 1.5a2 2 0 010 2.828l-1.5 1.5z"
-                    />
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M8 16l-1.5-1.5a2 2 0 010-2.828L8 10m0 6l1.5 1.5a2 2 0 002.828 0L14 14m-6 0l1.5-1.5a2 2 0 012.828 0L14 14m0 0l1.5-1.5a2 2 0 012.828 0L20 14"
-                    />
-                  </svg>
-                </div>
+            {/* Animated Clock - Visible only on mobile */}
+            <div className="ml-3 lg:hidden">
+              <div className="clock-face">
+                {[0, 1, 2, 3].map((i) => (
+                  <div 
+                    key={i}
+                    className="clock-mark"
+                    style={{ transform: `rotate(${i * 90}deg) translateX(-50%)` }}
+                  />
+                ))}
+                <div className="hour-hand"></div>
+                <div className="minute-hand"></div>
+                <div className="second-hand"></div>
+                <div className="clock-center"></div>
               </div>
             </div>
           </div>

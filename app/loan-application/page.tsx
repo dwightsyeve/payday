@@ -208,19 +208,43 @@ export default function LoanApplication() {
   type ErrorsType = Partial<Record<keyof FormType, string>>;
   const [errors, setErrors] = useState<ErrorsType>({});
 
-  // Simple validation for required fields
-  function validate(fields: (keyof FormType)[]): boolean {
-    const newErrors: ErrorsType = {};
-    
-    fields.forEach((field: keyof FormType) => {
+  const validate = (fields: (keyof FormType)[] = []) => {
+    const newErrors: Partial<Record<keyof FormType, string>> = {};
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const validPhone = /^\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})$/;
+    const validSSN = /^\d{3}-?\d{2}-?\d{4}$/;
+    const validABA = /^\d{9}$/;
+    const validAccountNumber = /^\d{4,17}$/;
+
+    const fieldsToValidate = fields.length > 0 ? fields : (Object.keys(form) as (keyof FormType)[]);
+
+    // Special validation for ABA Routing Number
+    if ((fieldsToValidate.includes('aba') || fieldsToValidate.length === 0) && form.aba) {
+      if (!validABA.test(form.aba)) {
+        newErrors.aba = 'Please enter a valid 9-digit ABA routing number';
+      }
+    }
+
+    // Special validation for Account Number
+    if ((fieldsToValidate.includes('accountNumber') || fieldsToValidate.length === 0) && form.accountNumber) {
+      if (!validAccountNumber.test(form.accountNumber)) {
+        newErrors.accountNumber = 'Account number must be between 4-17 digits';
+      }
+    }
+
+    for (const field of fieldsToValidate) {
       if (!form[field]) {
         newErrors[field] = "Required";
       } else if (field === 'phone' && !validatePhoneNumber(form.phone)) {
         newErrors.phone = "Please enter a valid phone number (e.g., 123-456-7890)";
       } else if (field === 'ssn' && !validateSSN(form.ssn)) {
         newErrors.ssn = "Please enter a valid SSN (e.g., 123-45-6789)";
+      } else if (field === 'aba' && !validABA.test(form.aba)) {
+        newErrors.aba = 'Please enter a valid 9-digit ABA routing number';
+      } else if (field === 'accountNumber' && !validAccountNumber.test(form.accountNumber)) {
+        newErrors.accountNumber = 'Account number must be between 4-17 digits';
       }
-    });
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -760,12 +784,45 @@ export default function LoanApplication() {
                 <label className="block mb-1">Bank State</label>
                 <input name="bankState" value={form.bankState} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.bankState && <p className="text-red-500 text-xs">{errors.bankState}</p>}
-                <label className="block mb-1">ABA Routing Number</label>
-                <input name="aba" value={form.aba} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.aba && <p className="text-red-500 text-xs">{errors.aba}</p>}
-                <label className="block mb-1">Account Number</label>
-                <input name="accountNumber" value={form.accountNumber} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.accountNumber && <p className="text-red-500 text-xs">{errors.accountNumber}</p>}
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700">ABA Routing Number</label>
+                  <input 
+                    name="aba" 
+                    value={form.aba} 
+                    onChange={(e) => {
+                      // Only allow numbers and format as 9 digits
+                      const value = e.target.value.replace(/\D/g, '').substring(0, 9);
+                      setForm(prev => ({ ...prev, aba: value }));
+                    }}
+                    placeholder="123456789"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                  />
+                  {errors.aba ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.aba}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-gray-500">9-digit number</p>
+                  )}
+                </div>
+                
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700">Account Number</label>
+                  <input 
+                    name="accountNumber" 
+                    value={form.accountNumber} 
+                    onChange={(e) => {
+                      // Only allow numbers and limit to 17 digits (standard US account number max)
+                      const value = e.target.value.replace(/\D/g, '').substring(0, 17);
+                      setForm(prev => ({ ...prev, accountNumber: value }));
+                    }}
+                    placeholder="Enter your account number"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                  />
+                  {errors.accountNumber ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.accountNumber}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-gray-500">4-17 digits, numbers only</p>
+                  )}
+                </div>
                 <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
                   <button 
                     type="button" 

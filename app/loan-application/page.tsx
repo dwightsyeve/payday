@@ -127,11 +127,7 @@ export default function LoanApplication() {
 
   const handleConsolidationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value === 'others') {
-      setForm(prev => ({ ...prev, loanPurpose: customConsolidation || 'Other Debt Consolidation' }));
-    } else {
-      setForm(prev => ({ ...prev, loanPurpose: value }));
-    }
+    setForm(prev => ({ ...prev, loanPurpose: value }));
   };
 
   const handleCustomConsolidationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -206,13 +202,15 @@ export default function LoanApplication() {
             {step === 1 && (
             
               <form onSubmit={e => {
-                e.preventDefault(); 
+                e.preventDefault();
                 const fields: (keyof FormType)[] = ["firstName","lastName","email","phone","zip","street","city","state","dob","ssn","dlFront","dlBack"];
-                if (form.loanPurpose === 'Debt Consolidation' && !form.loanPurpose) {
-                  fields.push('loanPurpose');
-                } else {
-                  fields.push('loanPurpose');
+                
+                // If user selected 'others' and typed something, use that as the loan purpose
+                if (form.loanPurpose === 'others' && customConsolidation) {
+                  setForm(prev => ({ ...prev, loanPurpose: customConsolidation }));
                 }
+                
+                fields.push('loanPurpose');
                 next(fields);
               }}>
                 <label className="block mb-1">Loan Type</label>

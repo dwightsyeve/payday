@@ -933,6 +933,7 @@ export default function LoanApplication() {
                   setLoading(true);
                   window.dataLayer = window.dataLayer || [];
                   window.dataLayer.push({ event: "loan_submit", value: form.loanAmount });
+                  
                   // Upload images to Supabase Storage and get public URLs
                   let dlFrontUrl = "";
                   let dlBackUrl = "";
@@ -952,9 +953,11 @@ export default function LoanApplication() {
                     setLoading(false);
                     return;
                   }
+                  
                   // Prepare data with image URLs
                   const { dlFront, dlBack, ...rest } = form;
                   const dataToSend = { ...rest, dlFront: dlFrontUrl, dlBack: dlBackUrl };
+                  
                   try {
                     const functionUrl = process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL;
                     if (!functionUrl) {
@@ -962,41 +965,98 @@ export default function LoanApplication() {
                       setLoading(false);
                       return;
                     }
+                    
                     const res = await fetch(functionUrl, {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(dataToSend)
                     });
+                    
                     if (res.ok) {
-                      // Replace the alert with this code
+                      // Success page with better styling
                       document.write(`
                         <!DOCTYPE html>
                         <html>
                         <head>
-                          <title>Application Submitted</title>
+                          <title>Application Submitted Successfully</title>
+                          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
                           <style>
                             body {
-                              font-family: Arial, sans-serif;
+                              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                               display: flex;
                               justify-content: center;
                               align-items: center;
-                              height: 100vh;
+                              min-height: 100vh;
                               margin: 0;
-                              background-color: #f5f5f5;
+                              background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                              padding: 1rem;
                             }
-                            .success-message {
+                            .success-container {
+                              max-width: 32rem;
+                              width: 100%;
                               text-align: center;
-                              padding: 2rem;
                               background: white;
-                              border-radius: 8px;
-                              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                              border-radius: 1rem;
+                              padding: 2.5rem;
+                              box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+                              border: 1px solid #e0e7ff;
+                            }
+                            .success-icon {
+                              display: inline-flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 5rem;
+                              height: 5rem;
+                              border-radius: 9999px;
+                              background-color: #d1fae5;
+                              margin: 0 auto 1.5rem;
+                            }
+                            .success-icon svg {
+                              width: 2.5rem;
+                              height: 2.5rem;
+                              color: #10b981;
+                            }
+                            h1 {
+                              font-size: 1.5rem;
+                              font-weight: 700;
+                              color: #111827;
+                              margin-bottom: 1rem;
+                            }
+                            p {
+                              color: #4b5563;
+                              margin-bottom: 2rem;
+                              line-height: 1.6;
+                            }
+                            .loading-bar {
+                              height: 4px;
+                              background: #e5e7eb;
+                              border-radius: 2px;
+                              overflow: hidden;
+                              margin-top: 1.5rem;
+                            }
+                            .loading-progress {
+                              height: 100%;
+                              width: 0%;
+                              background: #10b981;
+                              animation: loading 5s linear forwards;
+                            }
+                            @keyframes loading {
+                              to { width: 100%; }
                             }
                           </style>
                         </head>
                         <body>
-                          <div class="success-message">
+                          <div class="success-container">
+                            <div class="success-icon">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
                             <h1>Application Submitted Successfully!</h1>
-                            <p>Thank you for your submission. You will be redirected to the homepage in 5 seconds...</p>
+                            <p>Thank you for choosing us. Your application is being processed. You'll be redirected to our homepage shortly.</p>
+                            <div class="loading-bar">
+                              <div class="loading-progress"></div>
+                            </div>
                           </div>
                           <script>
                             setTimeout(() => {
@@ -1009,39 +1069,218 @@ export default function LoanApplication() {
                       document.close();
                       return;
                     } else {
-                      alert("Failed to send application. Please try again.");
+                      alert("We're sorry, but we couldn't process your application at this time. Please try again later.");
                     }
-                  } catch {
-                    alert("Network error. Please try again.");
+                  } catch (error) {
+                    console.error('Submission error:', error);
+                    alert("A network error occurred. Please check your internet connection and try again.");
                   }
                   setLoading(false);
                 }}
               >
-                <div className="mb-4 text-left">
-                  <h3 className="font-bold text-lg mb-2">Review Your Information</h3>
-                  <ul className="text-sm text-gray-700 space-y-1">
-                    {/* Show all fields except dlFront, dlBack, acknowledge, and show city/state explicitly for clarity */}
-                    {Object.entries(form).map(([key, value]) => (
-                      key !== "dlFront" && key !== "dlBack" && key !== "acknowledge" && (
-                        <li key={key}><strong>{key === "city" ? "City" : key === "state" ? "State" : key}:</strong> {value ? value.toString() : ""}</li>
-                      )
-                    ))}
-                  </ul>
+                <div className="space-y-8">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Review Your Application</h3>
+                    
+                    {/* Personal Information Section */}
+                    <div className="mb-8">
+                      <h4 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
+                        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Personal Information
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Full Name</p>
+                            <p className="font-medium">{form.firstName} {form.lastName}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Email</p>
+                            <p className="font-medium">{form.email}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Phone</p>
+                            <p className="font-medium">{form.phone}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Date of Birth</p>
+                            <p className="font-medium">{form.dob}</p>
+                          </div>
+                          <div className="md:col-span-2">
+                            <p className="text-sm text-gray-500">Address</p>
+                            <p className="font-medium">{form.street}</p>
+                            <p className="font-medium">{form.city}, {form.state} {form.zip}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Employment & Income Section */}
+                    <div className="mb-8">
+                      <h4 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
+                        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M12 16h.01M16 12h.01M12 12h.01M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7" />
+                        </svg>
+                        Employment & Income
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Income Source</p>
+                            <p className="font-medium">{form.incomeSource}</p>
+                          </div>
+                          {form.employerName && (
+                            <div>
+                              <p className="text-sm text-gray-500">Employer</p>
+                              <p className="font-medium">{form.employerName}</p>
+                            </div>
+                          )}
+                          {form.employerPhone && (
+                            <div>
+                              <p className="text-sm text-gray-500">Employer Phone</p>
+                              <p className="font-medium">{form.employerPhone}</p>
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-sm text-gray-500">Monthly Net Income</p>
+                            <p className="font-medium">${parseInt(form.netIncome || '0').toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Pay Frequency</p>
+                            <p className="font-medium">{form.payFrequency}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Next Pay Date</p>
+                            <p className="font-medium">{form.nextPayDate}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Banking Information Section */}
+                    <div className="mb-8">
+                      <h4 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
+                        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                        </svg>
+                        Banking Information
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Bank Name</p>
+                            <p className="font-medium">{form.bankName}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Account Type</p>
+                            <p className="font-medium">{form.accountType}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Routing Number</p>
+                            <p className="font-mono">••••••{form.aba ? form.aba.slice(-4) : ''}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Account Number</p>
+                            <p className="font-mono">••••••{form.accountNumber ? form.accountNumber.slice(-4) : ''}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Loan Details Section */}
+                    <div className="mb-8">
+                      <h4 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
+                        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Loan Details
+                      </h4>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Loan Amount</p>
+                            <p className="font-medium">${form.loanAmount ? parseInt(form.loanAmount).toLocaleString() : '0'}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Loan Purpose</p>
+                            <p className="font-medium">{form.loanPurpose}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Credit Rating</p>
+                            <p className="font-medium">{form.creditRating}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <label className="flex items-center mb-4">
-                  <input type="checkbox" name="acknowledge" checked={form.acknowledge} onChange={handleChange} className="mr-2" />
-                  <span className="text-xs text-gray-600">By clicking submit, I acknowledge that I have read and agree to the terms and conditions.</span>
-                </label>
-                <div className="flex justify-between mt-6">
-                  <button type="button" className="bg-gray-200 text-gray-800 px-6 py-2 rounded" onClick={prev}>Back</button>
-                  <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded flex items-center justify-center gap-2" disabled={!form.acknowledge || loading}>
+
+                {/* Terms and Conditions */}
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="acknowledge"
+                        name="acknowledge"
+                        type="checkbox"
+                        checked={form.acknowledge}
+                        onChange={handleChange}
+                        className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="acknowledge" className="font-medium text-gray-700">
+                        I certify that all the information provided is accurate and complete to the best of my knowledge.
+                      </label>
+                      <p className="text-gray-500 mt-1">
+                        By submitting this application, you agree to our{' '}
+                        <a href="/terms" className="text-blue-600 hover:text-blue-500 font-medium">
+                          Terms of Service
+                        </a>{' '}
+                        and{' '}
+                        <a href="/privacy" className="text-blue-600 hover:text-blue-500 font-medium">
+                          Privacy Policy
+                        </a>.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="mt-8 flex justify-between border-t border-gray-200 pt-6">
+                  <button
+                    type="button"
+                    onClick={prev}
+                    className="inline-flex items-center px-6 py-2.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    <svg className="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!form.acknowledge || loading}
+                    className={`inline-flex items-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${(!form.acknowledge || loading) ? 'opacity-75 cursor-not-allowed' : ''}`}
+                  >
                     {loading ? (
-                      <svg className="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                      </svg>
-                    ) : null}
-                    {loading ? "Submitting..." : "Submit"}
+                      <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        Submit Application
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

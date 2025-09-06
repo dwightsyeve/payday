@@ -22,7 +22,6 @@ export default function LoanApplication() {
   const [customConsolidation, setCustomConsolidation] = useState('');
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState('');
-  const [isAutoFilled, setIsAutoFilled] = useState(false);
   
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
@@ -154,38 +153,13 @@ export default function LoanApplication() {
     return Object.keys(newErrors).length === 0;
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const { name, value, type, checked, files } = e.target as HTMLInputElement;
-    
-    // Handle zip code changes
-    if (name === 'zip') {
-      // For zip code, we only want string values
-      const newValue = value;
-      setForm(prev => ({
-        ...prev,
-        [name]: newValue
-      }));
-      
-      // If zip is being cleared, unlock city/state
-      if (!value) {
-        setIsAutoFilled(false);
-        setLocationError('');
-        return;
-      }
-      
-      // If zip is being changed and has at least 3 digits, fetch location
-      if (value.length >= 3) {
-        fetchLocationByZip(value);
-      }
-      return;
-    }
-    
-    // For other fields, update normally
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : type === "file" ? (files ? files[0] : null) : value
     }));
-  };
+  }
 
   const handleLoanPurposeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -204,35 +178,6 @@ export default function LoanApplication() {
     const value = e.target.value;
     setCustomConsolidation(value);
     setForm(prev => ({ ...prev, loanPurpose: value || 'Other Debt Consolidation' }));
-  };
-
-  const fetchLocationByZip = async (zip: string) => {
-    if (!zip || zip.length < 3) return;
-    
-    setIsLocating(true);
-    setLocationError('');
-    
-    try {
-      const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
-      if (!response.ok) throw new Error('Invalid zip code');
-      
-      const data = await response.json();
-      if (data.places && data.places[0]) {
-        const place = data.places[0];
-        setForm(prev => ({
-          ...prev,
-          city: place['place name'] || '',
-          state: place['state'] || ''
-        }));
-        setIsAutoFilled(true);
-      }
-    } catch (error) {
-      console.error('Error fetching location:', error);
-      setLocationError('Could not find location for this zip code');
-      setIsAutoFilled(false);
-    } finally {
-      setIsLocating(false);
-    }
   };
 
   function next(fields: (keyof FormType)[]) {
@@ -417,7 +362,7 @@ export default function LoanApplication() {
                       onChange={handleChange} 
                       className="w-full mb-4 p-2 border rounded" 
                       placeholder={isLocating ? 'Detecting...' : 'City'}
-                      disabled={isLocating || isAutoFilled}
+                      disabled={isLocating}
                     />
                     {errors.city && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.city}</p>}
                   </div>
@@ -429,7 +374,7 @@ export default function LoanApplication() {
                       onChange={handleChange} 
                       className="w-full mb-4 p-2 border rounded" 
                       placeholder={isLocating ? 'Detecting...' : 'State'}
-                      disabled={isLocating || isAutoFilled}
+                      disabled={isLocating}
                     />
                     {errors.state && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.state}</p>}
                   </div>

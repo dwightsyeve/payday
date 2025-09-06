@@ -8,14 +8,30 @@ import { Users, Clock, Shield, Award, Smartphone, FileText, CheckCircle } from "
 
 export default function Component() {
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
-  // Hero carousel state
+  // Hero carousel state - High quality images from Unsplash
   const heroImages = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80", // 1
-    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80", // 2
-    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1500&q=80", // 3
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1500&q=80", // 4
-    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80", // 5
-    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1500&q=80" // 6
+    // Business and finance themed
+    "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=80", // Office team
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1600&q=80", // Financial growth
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80", // Business meeting
+    "https://images.unsplash.com/photo-1556741536949-b1c401d11b0e?auto=format&fit=crop&w=1600&q=80", // Handshake deal
+    
+    // Money and success
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1600&q=80", // Financial growth
+    "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80", // Money plant
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80", // Calculator and money
+    
+    // People and success
+    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=80", // Team celebration
+    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80", // Business team
+    "https://images.unsplash.com/photo-1522071820081-6faa0638a091?auto=format&fit=crop&w=1600&q=80", // Team success
+    
+    // Additional variety
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80", // Calculator and money
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80", // Business meeting
+    "https://images.unsplash.com/photo-1556741536949-b1c401d11b0e?auto=format&fit=crop&w=1600&q=80", // Handshake deal
+    "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1600&q=80", // Financial growth
+    "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1600&q=80"  // Money plant
   ];
   const [heroIndex, setHeroIndex] = React.useState(0);
   React.useEffect(() => {

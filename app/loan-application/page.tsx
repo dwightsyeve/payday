@@ -377,9 +377,11 @@ export default function LoanApplication() {
       </Head>
       <div className="min-h-screen flex flex-col bg-white">
       <header className="bg-white shadow-sm py-4 px-8 flex items-center justify-between">
-        <div className="flex items-center">
-            <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
-          </div>
+              <div className="flex items-center">
+                <Link href="/" className="focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-md">
+                  <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg hover:opacity-90 transition-opacity" />
+                </Link>
+              </div>
         <nav className="flex space-x-8 text-sm">
           <Link href="/" className="text-gray-600 hover:text-blue-700">Home</Link>
           <Link href="/about-us" className="text-gray-600 hover:text-blue-700">About Us</Link>

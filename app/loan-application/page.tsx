@@ -244,11 +244,10 @@ export default function LoanApplication() {
 
   const handleConsolidationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value === 'others') {
-      setForm(prev => ({ ...prev, loanPurpose: customConsolidation || 'Other Debt Consolidation' }));
-    } else {
-      setForm(prev => ({ ...prev, loanPurpose: value }));
-    }
+    setForm(prev => ({
+      ...prev,
+      loanPurpose: value === 'others' ? 'others' : value
+    }));
   };
 
   const handleCustomConsolidationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -355,9 +354,9 @@ export default function LoanApplication() {
                   <div className="mt-2 pl-4 border-l-4 border-blue-200">
                     <label className="block mb-1 text-sm text-gray-600">Consolidation Type</label>
                     <select 
-                      value={form.loanPurpose === customConsolidation && customConsolidation ? 'others' : form.loanPurpose} 
-                      onChange={handleConsolidationChange} 
-                      className="w-full p-2 border rounded"
+                      value={form.loanPurpose} 
+                      onChange={handleConsolidationChange}
+                      className="w-full mb-2 p-2 border rounded text-sm"
                     >
                       <option value="">Select consolidation type</option>
                       <option value="Student Loan Consolidation">Student Loan Consolidation</option>
@@ -369,15 +368,16 @@ export default function LoanApplication() {
                     </select>
                     
                     {(form.loanPurpose === 'others' || customConsolidation) && (
-                      <input 
-                        type="text" 
-                        value={customConsolidation}
-                        onChange={handleCustomConsolidationChange}
-                        onFocus={() => setShowConsolidationOptions(true)}
-                        placeholder="Please specify"
-                        className="w-full mt-2 p-2 border rounded"
-                        autoFocus
-                      />
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          value={customConsolidation}
+                          onChange={handleCustomConsolidationChange}
+                          onFocus={() => setForm(prev => ({ ...prev, loanPurpose: 'others' }))}
+                          placeholder="Please specify the consolidation type"
+                          className="w-full p-2 border rounded text-sm"
+                        />
+                      </div>
                     )}
                   </div>
                 )}

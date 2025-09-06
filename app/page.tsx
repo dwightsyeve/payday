@@ -24,7 +24,6 @@ export default function Component() {
     // People and success
     "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1600&q=80", // Team celebration
     "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80", // Business team
-    "https://images.unsplash.com/photo-1522071820081-6faa0638a091?auto=format&fit=crop&w=1600&q=80", // Team success
     
     // Additional variety
     "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80", // Calculator and money

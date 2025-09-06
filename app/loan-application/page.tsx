@@ -20,11 +20,55 @@ export default function LoanApplication() {
             const [loading, setLoading] = React.useState(false);
   const [showConsolidationOptions, setShowConsolidationOptions] = useState(false);
   const [customConsolidation, setCustomConsolidation] = useState('');
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState('');
   
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
   React.useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1200);
+    
+    // Get user's location when component mounts
+    const getLocation = async () => {
+      if (!navigator.geolocation) {
+        setLocationError('Geolocation is not supported by your browser');
+        return;
+      }
+
+      setIsLocating(true);
+      try {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+          });
+        });
+
+        // Use OpenStreetMap's Nominatim for reverse geocoding
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&addressdetails=1`
+        );
+        const data = await response.json();
+
+        if (data.address) {
+          setForm(prev => ({
+            ...prev,
+            city: data.address.city || data.address.town || data.address.village || '',
+            state: data.address.state || '',
+            zip: data.address.postcode || ''
+          }));
+        }
+      } catch (error) {
+        console.error('Error getting location:', error);
+        setLocationError('Could not determine your location. Please enter manually.');
+      } finally {
+        setIsLocating(false);
+      }
+    };
+
+    getLocation();
+    
     return () => clearTimeout(timer);
   }, []);
   const [step, setStep] = useState<number>(1);
@@ -279,18 +323,68 @@ export default function LoanApplication() {
                 <label className="block mb-1">Mobile Number</label>
                 <input name="phone" value={form.phone} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
-                <label className="block mb-1">Zip Code</label>
-                <input name="zip" value={form.zip} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.zip && <p className="text-red-500 text-xs">{errors.zip}</p>}
+                <div className="relative">
+                  <label className="block mb-1">Zip Code</label>
+                  <div className="relative">
+                    <input 
+                      name="zip" 
+                      value={form.zip} 
+                      onChange={handleChange} 
+                      className="w-full mb-4 p-2 border rounded pr-10" 
+                      placeholder={isLocating ? 'Detecting...' : 'Enter zip code'}
+                      disabled={isLocating}
+                    />
+                    {isLocating && (
+                      <div className="absolute right-3 top-3">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                      </div>
+                    )}
+                  </div>
+                  {errors.zip && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.zip}</p>}
+                </div>
+
                 <label className="block mb-1">Street Address</label>
-                <input name="street" value={form.street} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.street && <p className="text-red-500 text-xs">{errors.street}</p>}
-                <label className="block mb-1">City</label>
-                <input name="city" value={form.city} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.city && <p className="text-red-500 text-xs">{errors.city}</p>}
-                <label className="block mb-1">State</label>
-                <input name="state" value={form.state} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
-                {errors.state && <p className="text-red-500 text-xs">{errors.state}</p>}
+                <input 
+                  name="street" 
+                  value={form.street} 
+                  onChange={handleChange} 
+                  className="w-full mb-4 p-2 border rounded" 
+                  placeholder="Enter street address"
+                />
+                {errors.street && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.street}</p>}
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-1">City</label>
+                    <input 
+                      name="city" 
+                      value={form.city} 
+                      onChange={handleChange} 
+                      className="w-full mb-4 p-2 border rounded" 
+                      placeholder={isLocating ? 'Detecting...' : 'City'}
+                      disabled={isLocating}
+                    />
+                    {errors.city && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.city}</p>}
+                  </div>
+                  <div>
+                    <label className="block mb-1">State</label>
+                    <input 
+                      name="state" 
+                      value={form.state} 
+                      onChange={handleChange} 
+                      className="w-full mb-4 p-2 border rounded" 
+                      placeholder={isLocating ? 'Detecting...' : 'State'}
+                      disabled={isLocating}
+                    />
+                    {errors.state && <p className="text-red-500 text-xs -mt-3 mb-2">{errors.state}</p>}
+                  </div>
+                </div>
+                
+                {locationError && (
+                  <div className="text-sm text-amber-600 bg-amber-50 p-2 rounded mb-4">
+                    {locationError}
+                  </div>
+                )}
                 <label className="block mb-1">Date of Birth</label>
                 <input name="dob" type="date" value={form.dob} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.dob && <p className="text-red-500 text-xs">{errors.dob}</p>}

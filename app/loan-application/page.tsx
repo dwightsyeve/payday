@@ -368,7 +368,7 @@ export default function LoanApplication() {
                       <option value="others">Others (please specify)</option>
                     </select>
                     
-                    {(form.loanPurpose === 'others' || (customConsolidation && form.loanPurpose === customConsolidation)) && (
+                    {(form.loanPurpose === 'others' || customConsolidation) && (
                       <input 
                         type="text" 
                         value={customConsolidation}

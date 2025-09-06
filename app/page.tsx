@@ -423,6 +423,10 @@ export default function Component() {
                 </div>
                 <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                  <span className="text-sm">Debt Consolidation</span>
+                </div>
+                <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                   <span className="text-sm">Business and Grants</span>
                 </div>
                 <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
@@ -433,6 +437,7 @@ export default function Component() {
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                   <span className="text-sm">Minority & Educational Loans</span>
                 </div>
+               
               </div>
             </div>
           </div>

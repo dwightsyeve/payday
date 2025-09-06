@@ -18,7 +18,7 @@ const steps = [
 
 export default function LoanApplication() {
             const [loading, setLoading] = React.useState(false);
-  // ...existing code...
+  
   const Head = require('next/head').default;
   const [isLoading, setIsLoading] = useState(true);
   React.useEffect(() => {

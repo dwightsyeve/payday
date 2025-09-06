@@ -179,23 +179,39 @@ export default function LoanApplication() {
             </div>
             {/* Step 1: Personal Info */}
             {step === 1 && (
-              <form onSubmit={e => {e.preventDefault(); next(["loanAmount","firstName","lastName","email","phone","zip","street","city","state","dob","ssn","dlFront","dlBack"]);}}>
-                <label className="block mb-2 font-semibold">Loan Amount</label>
-                <select name="loanAmount" value={form.loanAmount} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
-                  <option value="">Select amount</option>
-                  <option value="1000">$1,000</option>
-                  <option value="1500">$1,500</option>
-                  <option value="2000">$2,000</option>
-                  <option value="2500">$2,500</option>
-                  <option value="3000">$3,000</option>
-                  <option value="3500">$3,500</option>
-                  <option value="4000">$4,000</option>
-                  <option value="4500">$4,500</option>
-                  <option value="5000">$5,000</option>
-                  <option value="10000"> over $10,000</option>
-                  
+            
+              <form onSubmit={e => {e.preventDefault(); next(["loanPurpose","firstName","lastName","email","phone","zip","street","city","state","dob","ssn","dlFront","dlBack"]);}}>
+                <label className="block mb-1">Loan Purpose</label>
+                <select name="loanPurpose" value={form.loanPurpose} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
+                  <option value="">Select purpose</option>
+                  <optgroup label="Standard Purposes">
+                    <option value="Personal">Personal</option>
+                    <option value="Business">Business</option>
+                    <option value="Education">Education</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Home Improvement">Home Improvement</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Vacation">Vacation</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Debt Consolidation">Debt Consolidation</option>
+                  </optgroup>
+                  <optgroup label="Consolidation Options">
+                    <option value="Federal Student Loan Consolidation">Federal Student Loan Consolidation</option>
+                    <option value="Private Student Loan Consolidation">Private Student Loan Consolidation</option>
+                    <option value="Home Equity Loan (HEL)">Home Equity Loan (HEL)</option>
+                    <option value="Home Equity Line of Credit (HELOC)">Home Equity Line of Credit (HELOC)</option>
+                    <option value="Personal Loan for Debt Consolidation">Personal Loan for Debt Consolidation</option>
+                    <option value="Credit Card Balance Transfer">Credit Card Balance Transfer</option>
+                    <option value="Debt Management Plan (DMP)">Debt Management Plan (DMP)</option>
+                    <option value="Debt Settlement">Debt Settlement</option>
+                    <option value="401(k) or Retirement Account Loan">401(k) or Retirement Account Loan</option>
+                    <option value="Life Insurance Policy Loan">Life Insurance Policy Loan</option>
+                    <option value="Peer-to-Peer (P2P) Lending">Peer-to-Peer (P2P) Lending</option>
+                    <option value="Small Business Debt Consolidation">Small Business Debt Consolidation</option>
+                    <option value="Medical Debt Consolidation">Medical Debt Consolidation</option>
+                  </optgroup>
                 </select>
-                {errors.loanAmount && <p className="text-red-500 text-xs mb-2">{errors.loanAmount}</p>}
+                {errors.loanPurpose && <p className="text-red-500 text-xs">{errors.loanPurpose}</p>}
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block mb-1">First Name</label>
@@ -337,7 +353,7 @@ export default function LoanApplication() {
             )}
             {/* Step 3: Banking Info */}
             {step === 3 && (
-              <form onSubmit={e => {e.preventDefault(); next(["accountType","directDeposit","creditRating","loanPurpose","bankName","bankState","aba","accountNumber"]);}}>
+              <form onSubmit={e => {e.preventDefault(); next(["accountType","directDeposit","creditRating","loanAmount","bankName","bankState","aba","accountNumber"]);}}>
                 <label className="block mb-1">Account Type</label>
                 <select name="accountType" value={form.accountType} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
                   <option value="">Select type</option>
@@ -361,37 +377,24 @@ export default function LoanApplication() {
                   <option value="Poor">Poor</option>
                 </select>
                 {errors.creditRating && <p className="text-red-500 text-xs">{errors.creditRating}</p>}
-                <label className="block mb-1">Loan Purpose</label>
-                <select name="loanPurpose" value={form.loanPurpose} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
-                  <option value="">Select purpose</option>
-                  <optgroup label="Standard Purposes">
-                    <option value="Personal">Personal</option>
-                    <option value="Business">Business</option>
-                    <option value="Education">Education</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Home Improvement">Home Improvement</option>
-                    <option value="Auto">Auto</option>
-                    <option value="Vacation">Vacation</option>
-                    <option value="Wedding">Wedding</option>
-                    <option value="Debt Consolidation">Debt Consolidation</option>
-                  </optgroup>
-                  <optgroup label="Consolidation Options">
-                    <option value="Federal Student Loan Consolidation">Federal Student Loan Consolidation</option>
-                    <option value="Private Student Loan Consolidation">Private Student Loan Consolidation</option>
-                    <option value="Home Equity Loan (HEL)">Home Equity Loan (HEL)</option>
-                    <option value="Home Equity Line of Credit (HELOC)">Home Equity Line of Credit (HELOC)</option>
-                    <option value="Personal Loan for Debt Consolidation">Personal Loan for Debt Consolidation</option>
-                    <option value="Credit Card Balance Transfer">Credit Card Balance Transfer</option>
-                    <option value="Debt Management Plan (DMP)">Debt Management Plan (DMP)</option>
-                    <option value="Debt Settlement">Debt Settlement</option>
-                    <option value="401(k) or Retirement Account Loan">401(k) or Retirement Account Loan</option>
-                    <option value="Life Insurance Policy Loan">Life Insurance Policy Loan</option>
-                    <option value="Peer-to-Peer (P2P) Lending">Peer-to-Peer (P2P) Lending</option>
-                    <option value="Small Business Debt Consolidation">Small Business Debt Consolidation</option>
-                    <option value="Medical Debt Consolidation">Medical Debt Consolidation</option>
-                  </optgroup>
+                
+                <label className="block mb-2 font-semibold">Loan Amount</label>
+                <select name="loanAmount" value={form.loanAmount} onChange={handleChange} className="w-full mb-4 p-2 border rounded">
+                  <option value="">Select amount</option>
+                  <option value="1000">$1,000</option>
+                  <option value="1500">$1,500</option>
+                  <option value="2000">$2,000</option>
+                  <option value="2500">$2,500</option>
+                  <option value="3000">$3,000</option>
+                  <option value="3500">$3,500</option>
+                  <option value="4000">$4,000</option>
+                  <option value="4500">$4,500</option>
+                  <option value="5000">$5,000</option>
+                  <option value="10000"> over $10,000</option>
+                  
                 </select>
-                {errors.loanPurpose && <p className="text-red-500 text-xs">{errors.loanPurpose}</p>}
+                {errors.loanAmount && <p className="text-red-500 text-xs mb-2">{errors.loanAmount}</p>}
+
                 <label className="block mb-1">Bank Name</label>
                 <input name="bankName" value={form.bankName} onChange={handleChange} className="w-full mb-4 p-2 border rounded" />
                 {errors.bankName && <p className="text-red-500 text-xs">{errors.bankName}</p>}

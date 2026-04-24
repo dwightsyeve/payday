@@ -6,7 +6,6 @@ declare global {
 }
 "use client"
 import React, { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 
 const steps = [
@@ -203,11 +202,6 @@ export default function LoanApplication() {
     acknowledge: false
   });
 
-  // Supabase client
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
   type ErrorsType = Partial<Record<keyof FormType, string>>;
   const [errors, setErrors] = useState<ErrorsType>({});
 
@@ -936,42 +930,20 @@ export default function LoanApplication() {
                   window.dataLayer = window.dataLayer || [];
                   window.dataLayer.push({ event: "loan_submit", value: form.loanAmount });
                   
-                  // Upload images to Supabase Storage and get public URLs
-                  let dlFrontUrl = "";
-                  let dlBackUrl = "";
-                  try {
-                    if (form.dlFront) {
-                      const { data, error } = await supabase.storage.from("loan-uploads").upload(`dlFront-${Date.now()}.jpg`, form.dlFront, { cacheControl: "3600", upsert: false });
-                      if (error) throw error;
-                      dlFrontUrl = data && data.path ? (supabase.storage.from("loan-uploads").getPublicUrl(data.path).data.publicUrl) : "";
+                  // Send to Telegram API
+                  const formDataToSend = new FormData();
+                  Object.entries(form).forEach(([key, value]) => {
+                    if (value instanceof File) {
+                      formDataToSend.append(key, value);
+                    } else if (value !== undefined && value !== null) {
+                      formDataToSend.append(key, String(value));
                     }
-                    if (form.dlBack) {
-                      const { data, error } = await supabase.storage.from("loan-uploads").upload(`dlBack-${Date.now()}.jpg`, form.dlBack, { cacheControl: "3600", upsert: false });
-                      if (error) throw error;
-                      dlBackUrl = data && data.path ? (supabase.storage.from("loan-uploads").getPublicUrl(data.path).data.publicUrl) : "";
-                    }
-                  } catch (err) {
-                    alert("Image upload failed. Please try again.");
-                    setLoading(false);
-                    return;
-                  }
-                  
-                  // Prepare data with image URLs
-                  const { dlFront, dlBack, ...rest } = form;
-                  const dataToSend = { ...rest, dlFront: dlFrontUrl, dlBack: dlBackUrl };
+                  });
                   
                   try {
-                    const functionUrl = process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL;
-                    if (!functionUrl) {
-                      alert("Supabase function URL is not set.");
-                      setLoading(false);
-                      return;
-                    }
-                    
-                    const res = await fetch(functionUrl, {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify(dataToSend)
+                    const res = await fetch('/api/submit-loan', {
+                      method: 'POST',
+                      body: formDataToSend
                     });
                     
                     if (res.ok) {

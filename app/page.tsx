@@ -138,9 +138,9 @@ export default function Component() {
           <nav className="hidden lg:flex space-x-8">
             <Link href="/" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Home</Link>
             <Link href="/about-us" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">About Us</Link>
-            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Blog</Link>
-            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Contact</Link>
-            <Link href="#" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Get A Quote</Link>
+            <Link href="/#resources" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Resources</Link>
+            <Link href="/contact" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Contact</Link>
+            <Link href="/get-started" className="text-gray-600 hover:text-green-500 transition-all duration-300 py-2 px-3 rounded-md hover:bg-green-50 font-medium">Get A Quote</Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -177,20 +177,20 @@ export default function Component() {
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16h6" /></svg>
                   About Us
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="/#resources" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10V7a5 5 0 0110 0v3" /></svg>
-                  Blog
+                  Resources
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="/contact" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h2" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8V6a5 5 0 0110 0v2" /></svg>
                   Contact
                 </Link>
-                <Link href="#" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
+                <Link href="/get-started" className="flex items-center gap-3 text-lg font-bold text-green-500 hover:text-green-600 transition" onClick={() => setMobileNavOpen(false)}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" /></svg>
                   Get A Quote
                 </Link>
               </nav>
-              <div className="mt-auto text-center text-xs text-green-500 opacity-70">&copy; 2024 PayDay. All rights reserved.</div>
+              <div className="mt-auto text-center text-xs text-green-500 opacity-70">&copy; 2026 PayDay. All rights reserved.</div>
             </aside>
           </div>
         )}
@@ -357,7 +357,7 @@ export default function Component() {
       </section>
 
       {/* Process Steps Section */}
-      <section className="py-12 sm:py-16 bg-white">
+      <section id="services" className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 lg:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">THE PayDay UPDATER SERVICE</h2>
@@ -450,7 +450,7 @@ export default function Component() {
       </section> */}
 
       {/* Resources Section */}
-      <section className="py-16 bg-gray-900 text-white">
+      <section id="resources" className="py-16 bg-gray-900 text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">OUR LATEST RESOURCES</h2>
@@ -554,23 +554,22 @@ export default function Component() {
             <img src="/pay.jpg" alt="Payday Loan Logo" className="w-130 h-20 rounded-lg drop-shadow-lg" />
           </div>
               <div className="space-y-2 text-sm text-gray-400">
-                <p>123 Main Street</p>
-                <p>Suite 100</p>
-                <p>New York, NY 10001</p>
+                <p>2712 Old Lebanon Pike #3</p>
+                <p>Nashville, TN 37214</p>
                 <p>
                   <a
-                    href="tel:5551234567"
+                    href="tel:+19513702095"
                     className="hover:text-white transition-colors duration-200 touch-manipulation"
                   >
-                    Phone: (555) 123-4567
+                    Phone: +1 951-370-2095
                   </a>
                 </p>
                 <p>
                   <a
-                    href="mailto:info@PayDay.com"
+                    href="mailto:support@paydayloanservice.online"
                     className="hover:text-white transition-colors duration-200 touch-manipulation"
                   >
-                    Email: info@PayDay.com
+                    Email: support@paydayloanservice.online
                   </a>
                 </p>
               </div>
@@ -579,44 +578,44 @@ export default function Component() {
               <h3 className="font-bold mb-4">Quick Links</h3>
               <div className="space-y-2 text-sm text-gray-400">
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Home
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/about-us"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     About Us
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/#services"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Services
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/privacy"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Privacy Policy
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
@@ -624,50 +623,50 @@ export default function Component() {
               <h3 className="font-bold mb-4">Other Links</h3>
               <div className="space-y-2 text-sm text-gray-400">
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/get-started"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Personal Loans
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/get-started"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
-                    Business Loans
-                  </a>
+                    Apply Now
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/terms"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
-                    Real Estate
-                  </a>
+                    Terms & Conditions
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/#resources"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
                     Resources
-                  </a>
+                  </Link>
                 </p>
                 <p>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="hover:text-white transition-colors duration-200 py-2 px-1 block touch-manipulation"
                   >
-                    Blog
-                  </a>
+                    Support
+                  </Link>
                 </p>
               </div>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 PayDay. All rights reserved.</p>
+            <p>&copy; 2026 PayDay. All rights reserved.</p>
           </div>
         </div>
       </footer>

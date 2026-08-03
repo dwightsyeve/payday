@@ -12,7 +12,29 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+  			body: ['var(--font-body)', 'system-ui', 'sans-serif'],
+  		},
   		colors: {
+  			mint: {
+  				50: '#f0fdf6',
+  				100: '#dcfce9',
+  				200: '#bbf7d4',
+  			},
+  			skywash: {
+  				50: '#f0f9ff',
+  				100: '#e0f2fe',
+  				400: '#38bdf8',
+  				500: '#0ea5e9',
+  			},
+  			leaf: {
+  				400: '#4ade80',
+  				500: '#22c55e',
+  				600: '#16a34a',
+  				700: '#15803d',
+  				900: '#14532d',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -85,11 +107,26 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'fade-up': {
+  				from: { opacity: '0', transform: 'translateY(18px)' },
+  				to: { opacity: '1', transform: 'translateY(0)' }
+  			},
+  			'float-soft': {
+  				'0%, 100%': { transform: 'translateY(0)' },
+  				'50%': { transform: 'translateY(-8px)' }
+  			},
+  			'slide-in-left': {
+  				from: { transform: 'translateX(-100%)' },
+  				to: { transform: 'translateX(0)' }
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'fade-up': 'fade-up 0.7s ease-out both',
+  			'float-soft': 'float-soft 5s ease-in-out infinite',
+  			'slide-in-left': 'slide-in-left 0.35s ease-out'
   		}
   	}
   },

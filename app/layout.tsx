@@ -1,12 +1,23 @@
 import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { Outfit, Figtree } from 'next/font/google'
 import './globals.css'
 
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const figtree = Figtree({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
-  title: 'PayDayER',
-  description: 'created by PayDayers',
-  generator: 'seekers',
+  title: 'PayDay | Fast Loan Matching',
+  description:
+    'Get matched with trusted lenders fast. Secure online application for personal loans and short-term funding.',
 }
 
 export default function RootLayout({
@@ -15,17 +26,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body>{children}</body>
+    <html lang="en" className={`${outfit.variable} ${figtree.variable}`}>
+      <body className="font-body antialiased">{children}</body>
     </html>
   )
 }
